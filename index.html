@@ -520,14 +520,20 @@
           hours during tax season and never miss a deduction again.
         </p>
 
-        <form class="signup-form" onsubmit="handleSignup(event)">
+        <form
+          class="signup-form"
+          id="waitlist-form"
+          onsubmit="handleSignup(event)"
+        >
           <input
             type="email"
             class="email-input"
             placeholder="Enter your business email"
             required
           />
-          <button type="submit" class="signup-button">Get Early Access</button>
+          <button type="submit" id="signup-btn" class="signup-button">
+            Get Early Access
+          </button>
         </form>
 
         <div class="social-proof">
@@ -554,34 +560,43 @@
         e.preventDefault();
 
         const email = e.target.querySelector(".email-input").value;
+        const button = e.target.querySelector("#signup-btn");
+        const originalText = button.textContent;
 
         // Simulate signup process
         if (email) {
           //   signupCount++;
           //   document.getElementById("signupCount").textContent = signupCount;
-          var response = await fetch(
-            "https://script.google.com/macros/s/AKfycbxDkF66QFmVIITIeF8BETdpQlOBIYyvUSXh8qZBkcndLTa3w2YVkR2V1GXHSnr4O1OU/exec",
-            {
-              method: "POST",
-              body: JSON.stringify({ email }),
-              headers: { "Content-Type": "application/json" },
-            }
-          );
-
-          var data = await response.json();
-
-          if (data.result === "success") {
-            alert(
-              "Thank you for signing up! We'll notify you when ReceiptVault is ready."
+          button.disabled = true;
+          button.textContent = "Submitting...";
+          try {
+            var response = await fetch(
+              "https://script.google.com/macros/s/AKfycbxDkF66QFmVIITIeF8BETdpQlOBIYyvUSXh8qZBkcndLTa3w2YVkR2V1GXHSnr4O1OU/exec",
+              {
+                redirect: "follow",
+                method: "POST",
+                body: JSON.stringify({ email }),
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+              }
             );
-            document.getElementById("waitlist-form").reset();
-          } else {
-            alert("Oops, something went wrong.");
+
+            var data = await response.json();
+
+            if (data.result === "success") {
+              alert(
+                "Thank you for signing up! We'll notify you when ReceiptVault is ready."
+              );
+
+              document.getElementById("waitlist-form").reset();
+            } else {
+              alert("Oops, something went wrong.");
+            }
+          } catch (err) {
+            alert("Unexpected error. Please try again.");
           }
 
-          // Clear form
-          e.target.reset();
-
+          button.disabled = false;
+          button.textContent = originalText;
           // You could also store in localStorage for persistence
           //   localStorage.setItem("signupCount", signupCount);
         }
