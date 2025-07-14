@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReceiptVault - Stop Losing Money on Lost Receipts</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 1rem 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #667eea;
+      }
+
+      /* Hero Section */
+      .hero {
+        padding: 120px 0 80px;
+        text-align: center;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+
+      .hero-content h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-content .subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .problem-highlight {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 2rem 0;
+        backdrop-filter: blur(5px);
+      }
+
+      .problem-highlight .stat {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffeb3b;
+        margin-bottom: 0.5rem;
+      }
+
+      .cta-button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 1rem;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+      }
+
+      /* Features Section */
+      .features {
+        padding: 80px 0;
+        background: white;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: #333;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .feature-card p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      /* Problem Section */
+      .problem {
+        padding: 80px 0;
+        background: #f8f9fa;
+      }
+
+      .problem-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .problem-item {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        border-left: 4px solid #ff6b6b;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .problem-item h4 {
+        color: #ff6b6b;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
+
+      /* Solution Preview */
+      .solution-preview {
+        padding: 80px 0;
+        background: white;
+      }
+
+      .solution-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .step {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .step-number {
+        background: #667eea;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .step h4 {
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      /* Email Signup */
+      .email-signup {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-align: center;
+      }
+
+      .signup-form {
+        max-width: 500px;
+        margin: 2rem auto;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .email-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        outline: none;
+      }
+
+      .signup-button {
+        background: #ff6b6b;
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .signup-button:hover {
+        background: #ee5a24;
+        transform: translateY(-2px);
+      }
+
+      .social-proof {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        opacity: 0.9;
+      }
+
+      .signup-count {
+        font-weight: bold;
+        color: #ffeb3b;
+      }
+
+      /* Footer */
+      footer {
+        background: #333;
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .hero-content h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero-content .subtitle {
+          font-size: 1.2rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .signup-form {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .email-input {
+          min-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">📧 ReceiptVault</div>
+          <nav class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#problem">Problem</a>
+            <a href="#solution">Solution</a>
+            <a href="#signup">Get Early Access</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Stop Losing Money on Lost Receipts</h1>
+          <p class="subtitle">
+            AI-powered receipt management that saves you hours during tax season
+            and captures every tax deduction
+          </p>
+
+          <div class="problem-highlight">
+            <div class="stat">53%</div>
+            <p>
+              of small businesses lose receipts worth thousands in tax
+              deductions every year
+            </p>
+          </div>
+
+          <a href="#signup" class="cta-button">Get Early Access - It's Free!</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem" class="problem">
+      <div class="container">
+        <h2 class="section-title">The Receipt Management Nightmare</h2>
+
+        <div class="problem-grid">
+          <div class="problem-item">
+            <h4>📄 Lost Paper Receipts</h4>
+            <p>
+              Crumpled receipts in pockets, faded ink, misplaced documents -
+              thousands of dollars in deductions gone forever.
+            </p>
+          </div>
+
+          <div class="problem-item">
+            <h4>⏰ Hours of Manual Work</h4>
+            <p>
+              Sorting through shoeboxes, typing data into spreadsheets,
+              categorizing expenses - time you could spend growing your
+              business.
+            </p>
+          </div>
+
+          <div class="problem-item">
+            <h4>💰 Missed Tax Deductions</h4>
+            <p>
+              Without proper organization, you're leaving money on the table
+              every tax season. The average small business misses $1,200 in
+              deductions.
+            </p>
+          </div>
+
+          <div class="problem-item">
+            <h4>😰 Tax Season Stress</h4>
+            <p>
+              Scrambling to find receipts, dealing with your accountant's
+              requests, facing potential audit issues - all preventable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="solution" class="solution-preview">
+      <div class="container">
+        <h2 class="section-title">The ReceiptVault Solution</h2>
+
+        <div class="solution-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h4>Snap a Photo</h4>
+            <p>
+              Simply photograph your receipt with your phone - our AI extracts
+              all the important data instantly.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <h4>Auto-Categorize</h4>
+            <p>
+              Our smart AI learns your business patterns and automatically
+              categorizes expenses correctly.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <h4>Track & Report</h4>
+            <p>
+              Get real-time spending insights and generate tax-ready reports in
+              seconds, not hours.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <h4>Maximize Deductions</h4>
+            <p>
+              Never miss a deduction again with organized, searchable receipt
+              storage and smart reminders.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Features That Save You Time & Money</h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>AI-Powered OCR</h3>
+            <p>
+              Automatically extract merchant, date, amount, and tax information
+              from any receipt with 99% accuracy.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Smart Categorization</h3>
+            <p>
+              Our AI learns your business patterns and automatically sorts
+              expenses into the right tax categories.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Mobile-First Design</h3>
+            <p>
+              Capture receipts on the go with our intuitive mobile app. Never
+              lose another receipt again.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Tax-Ready Reports</h3>
+            <p>
+              Generate IRS-compliant expense reports in seconds. Your accountant
+              will thank you.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Deduction Maximizer</h3>
+            <p>
+              Smart alerts remind you of missed deductions and help you claim
+              every dollar you're entitled to.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Secure Storage</h3>
+            <p>
+              Bank-level security with encrypted cloud storage. Your financial
+              data is safe and accessible anywhere.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="signup" class="email-signup">
+      <div class="container">
+        <h2>Get Early Access to ReceiptVault</h2>
+        <p>
+          Be among the first to experience stress-free receipt management. Save
+          hours during tax season and never miss a deduction again.
+        </p>
+
+        <form class="signup-form" onsubmit="handleSignup(event)">
+          <input
+            type="email"
+            class="email-input"
+            placeholder="Enter your business email"
+            required
+          />
+          <button type="submit" class="signup-button">Get Early Access</button>
+        </form>
+
+        <div class="social-proof">
+          <!-- <p>
+            Join
+            <span class="signup-count" id="signupCount">0</span> entrepreneurs
+            who want this solution
+          </p> -->
+          <p>✅ Free early access • ✅ No spam • ✅ Unsubscribe anytime</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 ReceiptVault. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      //   let signupCount = 0;
+
+      async function handleSignup(e) {
+        e.preventDefault();
+
+        const email = e.target.querySelector(".email-input").value;
+
+        // Simulate signup process
+        if (email) {
+          //   signupCount++;
+          //   document.getElementById("signupCount").textContent = signupCount;
+          var response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxDkF66QFmVIITIeF8BETdpQlOBIYyvUSXh8qZBkcndLTa3w2YVkR2V1GXHSnr4O1OU/exec",
+            {
+              method: "POST",
+              body: JSON.stringify({ email }),
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          var data = await response.json();
+
+          if (data.result === "success") {
+            alert(
+              "Thank you for signing up! We'll notify you when ReceiptVault is ready."
+            );
+            document.getElementById("waitlist-form").reset();
+          } else {
+            alert("Oops, something went wrong.");
+          }
+
+          // Clear form
+          e.target.reset();
+
+          // You could also store in localStorage for persistence
+          //   localStorage.setItem("signupCount", signupCount);
+        }
+      }
+
+      // Load stored signup count on page load
+      //   window.addEventListener("load", function () {
+      //     const storedCount = localStorage.getItem("signupCount");
+      //     if (storedCount) {
+      //       signupCount = parseInt(storedCount);
+      //       document.getElementById("signupCount").textContent = signupCount;
+      //     }
+      //   });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
