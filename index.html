@@ -327,6 +327,20 @@
       }
     </style>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-P3P1DD6SX1"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-P3P1DD6SX1");
+  </script>
   <body>
     <header>
       <div class="container">
@@ -583,6 +597,11 @@
             var data = await response.json();
 
             if (data.result === "success") {
+              gtag("event", "waitlist_signup", {
+                event_category: "Form",
+                event_label: "Waitlist",
+              });
+
               alert(
                 "Thank you for signing up! We'll notify you when ReceiptVault is ready."
               );
